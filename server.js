@@ -1,5 +1,5 @@
 import express from 'express';
-// import routers
+import categoriesRouter from './routers/categoriesRouter.js';
 // import middleware
 
 const app = express();
@@ -8,7 +8,7 @@ const port = process.env.SERVER_PORT || 3001;
 app.use(express.static('public')); // middleware per static files
 app.use(express.json()); // middleware interprete
 
-// inserire il router 
+app.use(categoriesRouter);
 
 //inserire altri middleware es. errorHandler, notFound
 
