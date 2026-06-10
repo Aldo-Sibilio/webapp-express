@@ -1,4 +1,5 @@
 import express from 'express';
+import { index } from '../controllers/products';
 
 // importazione controllers
 
@@ -9,7 +10,8 @@ import express from 'express';
 const router = express.Router();
 
 // rotta index
+router.get('', index);
 
-//rotta show
+// rotta show
 
 export default router;
