@@ -1,24 +1,41 @@
 import express from 'express';
-// import routers
+import categoriesRouter from './routers/categoriesRouter.js';
+import reviewsRouter from "./routers/reviews.js";
+import productsRouter from './routers/products.js';
 // import middleware
+import pool from './utils/db.js';
+import errorHandler from './middlewares/errorHandler.js';
+import notFound from './middlewares/notFound.js';
 
-const app = express();
-const port = process.env.SERVER_PORT || 3001;
+const app = express()
+const port = process.env.SERVER_PORT || 3000
 
 app.use(express.static('public')); // middleware per static files
-app.use(express.json()); // middleware interprete
+app.use(express.json());// middleware interprete
 
-// inserire il router 
-import reviewsRouter from "./routers/reviews.js";
 app.use("/reviews", reviewsRouter);
-//inserire altri middleware es. errorHandler, notFound
+
+app.use("/categories", categoriesRouter);
+
+app.use('/products', productsRouter);
+
+// test: stampo i prodotti nel terminal
+const [rows] = await pool.query('SELECT * FROM products');
+console.log(rows);
+
+
+app.get('/', (request, response) => {
+    response
+        .type('html')
+        .send('<h1>Express blog Routing</h1>')
+})
+
+app.use(errorHandler);
 
 app.listen(port, (error) => {
     if (error) {
-        console.error(error);
-        return;
+        console.error('Il server ha riscontrato un problema');
+    } else {
+        console.log(`Server in ascolto porta ${port}`);
     }
-    console.log(`server attivo alla porta ${port}`);
-    
-
 });
