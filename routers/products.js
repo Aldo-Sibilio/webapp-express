@@ -14,5 +14,6 @@ const router = express.Router();
 router.get('/', [ index]);
 
 // rotta show
+router.get('/:id', [validateId, show]);
 
 export default router;
