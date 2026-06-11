@@ -1,3 +1,5 @@
+import pool from "../utils/db.js";
+
 async function index(request, response) {
     try {
         // Recupera dall'URL il parametro star_rating.
@@ -29,7 +31,7 @@ async function index(request, response) {
         // Esegue la query.
         // senza filtro values restituisce tutte le recensioni.
         // con il filtro star_rating restituisce solo quelle con il voto richiesto.
-        const [rows] = await connection.query(sql, values);
+        const [rows] = await pool.query(sql, values);
 
         // Anche se non sono presenti recensioni non viene restituito un errore perché un risultato vuoto è possibile.
         if (rows.length === 0) {
