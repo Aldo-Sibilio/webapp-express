@@ -14,7 +14,7 @@ const index = async (request, response) => {
     try {
         // eseguo la query per ottenere tutte le categorie dal database
         const [rows] = await pool.query(querySelectAllCategoriesandProducts);
-        const productsWithCategories = [];
+        let productsWithCategories = [];
         let currentProduct = null;
         for (let i = 0; i < rows.length; i++) {
             const currentRow = rows[i]; //ciclo le righe, che sono OGGETTI
@@ -35,7 +35,7 @@ const index = async (request, response) => {
                 availability
             } = currentRow;
             // devo fare la find per trovare currentProduct
-            const existingProduct = productsWithCategories.find(product => product.id === productId);
+            const existingProduct = productsWithCategories.find(product => product.productId === productId);
             // se il prodotto non c'è in array
             // come trovo il prodotto da rows[i]??????
             if (!existingProduct) {
