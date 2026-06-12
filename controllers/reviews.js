@@ -47,27 +47,34 @@ async function index(request, response) {
 }
 
 async function show(request, response) {
-    const { realId } = request;
+    const  realId = request.realId;
 
-    const sqlShow = 'SELECT * FROM `reviews` WHERE id = ?'
+    const sqlShow = `select r.*, p.name as product_name
+    from reviews r join products p on p.id = r.product_id
+    where p.id = ?
+    ORDER BY r.submission_date DESC
+    LIMIT 3;`;
 
     try {
         // Cerca nel database la recensione con l'id richiesto, il valore realId viene associato al segnaposto ?.
         const [rows] = await pool.execute(
             sqlShow, [realId]
         );
-        // Se non viene trovata alcuna recensione con l'id specificato, restituisce un errore 404.
+        // N - ho tolto la validazione perchè se un prodotto ha 0 reviews,
+        // non va lanciato errore ma mostrato solo un array vuoto
         if (rows.length === 0) {
-            response.status(404).json({
-                error: `Recensione ${realId} non trovata`,
-                results: null
+            response.status(200).json({
+                error: null,
+                results: []
             });
             return;
         }
-        // Restituisce la singola recensione trovata.
-        response.status(200).json({
+
+        // Restituisce arrai di reviews.
+        response.status(200)
+        .json({
             error: null,
-            results: rows[0]
+            results: rows
         });
     } catch (error) {
         console.error(
@@ -75,7 +82,8 @@ async function show(request, response) {
             error.message
         );
         // Gestisce eventuali problemi del server o del database.
-        response.status(500).json({
+        response.status(500)
+            .json({
             error: 'errore interno del server nel recupero della recensione',
             results: null
         });
