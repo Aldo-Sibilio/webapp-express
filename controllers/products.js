@@ -47,4 +47,27 @@ async function show(request, response) {
     }
 }
 
-export { index, show };
+async function featured(request, response) {
+    const querySelectFeaturedProducts = `select p.*
+    from products p 
+    order by updated_at desc
+    limit 5;`;
+
+    try {
+        const [rows] = await pool.query(querySelectFeaturedProducts);
+        const normalizedProducts = rows.map(normalizeProduct);
+
+        response.json({
+            error: null,
+            results: normalizedProducts
+        });
+    } catch (error) {
+        console.error("errore durante l'import dei prodotti featured", error.message)
+        response.status(500).json({
+            error: 'errore interno del server nel recupero dei prodotti featured',
+            results: null
+        })
+    }
+}
+
+export { index, show, featured };
