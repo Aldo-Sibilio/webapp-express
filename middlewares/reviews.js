@@ -69,11 +69,11 @@ function validateReviewBody(request, response, next) {
         });
     }
 
-    request.realTitle = title.trim();
-    request.realBody = body.trim();
-    request.rating = rating;
-    request.realAuthorName = author_name.trim();
-    request.realProductId = realProductId;
+    request.body.realTitle = title.trim();
+    request.body.realBody = body.trim();
+    request.body.rating = rating;
+    request.body.realAuthorName = author_name.trim();
+    request.body.realProductId = realProductId;
 
     next();
 
