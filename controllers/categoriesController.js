@@ -2,10 +2,18 @@ import pool from '../utils/db.js';
 
 // funzione che gestisce la richiesta GET per ottenere tutte le categorie
 const index = async (request, response) => {
-    const querySelectAll = 'SELECT * FROM categories';
+    const querySelectAllCategoriesandProducts = `
+    SELECT 
+    c.id as category_id, c.name AS category_name, c.short_description AS category_short_description, p.id AS product_id, p.name as product_name, p.price as price, p.image_url as imageUrl
+    FROM categories c
+    LEFT JOIN category_product cp
+	ON c.id = cp.category_id
+    LEFT JOIN products p
+	ON p.id = cp.product_id`;
+
     try {
         // eseguo la query per ottenere tutte le categorie dal database
-        const [categories] = await pool.query(querySelectAll);
+        const [categories] = await pool.query(querySelectAllCategoriesandProducts);
 
         // rispondo con i dati in formato JSON
         response.json({
@@ -34,8 +42,8 @@ async function show(request, response) {
     WHERE c.name = ? ;`;
 
     try {
-    
-        const [rows] = await pool.query(querySelectProductByCateogryName, [categoryName]); 
+
+        const [rows] = await pool.query(querySelectProductByCateogryName, [categoryName]);
         const relativePath = rawProduct.image_url?.replace('http://localhost:3000', '') || ''; // cancello questo placeholder del dominio
         // normalizzo i prodotti
         const normalizedProducts = rows.map(product => {
@@ -51,10 +59,10 @@ async function show(request, response) {
                 error: 'errore interno del server nel recupero della categoria del prodotto',
                 resutls: null
             });
-            return;
+        return;
 
     }
-    
+
 };
 
 export { index, show };
