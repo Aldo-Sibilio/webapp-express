@@ -9,10 +9,10 @@ const querySelectProductBySearchString = `
     from products p
     join category_product cp on p.id = cp.product_id
     join categories c on c.id = cp.category_id
-    where p.name like '%?%' 
-    or p.marketing_description like '%?%' 
-    or c.name like '%?%' 
-    or c.marketing_description like '%?%';
+    where p.name like ? 
+    or p.marketing_description like ? 
+    or c.name like ? 
+    or c.marketing_description like ?;
     `;
 
 
