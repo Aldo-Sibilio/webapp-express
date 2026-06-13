@@ -1,7 +1,5 @@
 'use strict';
 
-import { index } from "../controllers/products";
-
 /* ====== PRODUCTS ===== */
 
 // INDEX
@@ -44,6 +42,37 @@ const querySelectProductStarRatingById = `
 
 
 /* ====== REVIEWS ===== */
+
+// Query di partenza se non viene specificato alcun filtro.
+const querySelectAllReviews = "SELECT * FROM reviews";
+
+/* mostra le 3 reviews più recenti */
+
+const querySelectFeaturedReviews = `select r.*, p.name as product_name
+    from reviews r join products p on p.id = r.product_id
+    where p.id = ?
+    ORDER BY r.submission_date DESC
+    LIMIT 3;`;
+
+// mostra tutte le revie in base a id di un prodotto
+
+const queryShowAllProductReviews = `select r.*, p.name as product_name, p.id as product_id
+    from reviews r join products p on p.id = r.product_id
+    where p.id = ?
+    ORDER BY r.submission_date DESC`;
+
+// create 
+
+const queryCreateReview = `INSERT INTO reviews
+            (title, body, start_rating, author_name, submission_date, find_it_useful, product_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+// destroy
+const queryDestroyReview = `delete r.*
+    from reviews r
+    where r.id = ? `;
+
+
 /* ====== CATEGORIES ===== */
 
 export {
@@ -51,5 +80,10 @@ export {
     querySelectById,
     querySelectFeaturedProducts,
     querySelectProductBySearchString,
-    querySelectProductStarRatingById
+    querySelectProductStarRatingById,
+    querySelectAllReviews,
+    querySelectFeaturedReviews,
+    queryShowAllProductReviews,
+    queryCreateReview,
+    queryDestroyReview
 };
