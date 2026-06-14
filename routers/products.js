@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', [ index]);
 
 // rottta product featured
-router.get('/featured', [validateId, featured]);
+router.get('/featured', [featured]);
 
 // rotta show 
 

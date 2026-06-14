@@ -18,7 +18,7 @@ const querySelectFeaturedProducts = `select p.*
 /* restituisce le row dei prodotti che contengono la stringa ricevuta dalla richiesta la ricerca in p.name/p.description/c.name/c.description  */
 
 const querySelectProductBySearchString = `
-    select p.*
+    select distinct p.*
     from products p
     join category_product cp on p.id = cp.product_id
     join categories c on c.id = cp.category_id
