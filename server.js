@@ -5,6 +5,7 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import reviewsRouter from "./routers/reviews.js";
 import productsRouter from './routers/products.js';
 import { validateId } from './middlewares/validateId.js';
+import { claudeChat } from './utils/claudeChat.js';
 
 // import middleware
 import errorHandler from './middlewares/errorHandler.js';
@@ -24,6 +25,7 @@ app.use("/categories", categoriesRouter);
 
 app.use('/products', productsRouter);
 
+
 // test: stampo i prodotti nel terminal
 /* const [rows] = await pool.query('SELECT * FROM products');
 console.log(rows); */
@@ -37,10 +39,12 @@ app.get('/', (request, response) => {
 
 app.use(errorHandler);
 
+
 app.listen(port, (error) => {
     if (error) {
         console.error('Il server ha riscontrato un problema');
     } else {
         console.log(`Server in ascolto porta ${port}`);
     }
+    claudeChat();
 });
